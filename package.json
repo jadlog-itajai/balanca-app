@@ -1,0 +1,32 @@
+{
+    "name": "balanca-app",
+    "version": "1.0.0",
+    "description": "Aplicação para obter peso da balança via porta serial",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "app:dir": "electron-builder --dir",
+        "app:dist": "electron-builder"
+    },
+    "author": "Rafael Ferreira Costa",
+    "license": "ISC",
+    "build": {
+        "appId": "com.electron.balanca-app",
+        "productName": "Balança App",
+        "extraFiles": [
+            {
+                "from": "./Assets/icon.png",
+                "to": "./resources/"
+            }
+        ]
+    },
+    "dependencies": {
+        "auto-launch": "^5.0.5",
+        "express": "^4.17.2",
+        "serialport": "^10.3.0"
+    },
+    "devDependencies": {
+        "electron": "^6.0.0",
+        "electron-builder": "^22.14.13"
+    }
+}
