@@ -30,7 +30,7 @@ class WeightAPI {
 
         app.get('/', (req, res) => {
             // return res.json({ weight: (Math.random() * 10).toFixed(2) })
-            return res.json({ weight: current.toFixed(2) })
+            return res.json({ weight: current })
         })
 
         app.listen(port, () => {
