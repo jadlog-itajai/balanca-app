@@ -1,8 +1,8 @@
-const { app, BrowserWindow, Tray, nativeImage, Menu } = require('electron')
+const { app, Tray, nativeImage, Menu } = require('electron')
 const helper = require('./HelperFunctions.js')
 const path = require('path')
 
-class WindowManager {
+class ApplicationManager {
     constructor() {
         //Iconpath different in Build
         let imgPath = helper.isDev() ? './Assets/Icon.png' : path.join(process.resourcesPath, 'Icon.png')
@@ -14,17 +14,10 @@ class WindowManager {
         this.createTray()
     }
 
-    createTray() {
-        this.tray = new Tray(this.icon)
-
-        let contextMenu = Menu.buildFromTemplate([
+    getMenuTemplate() {
+        let template = Menu.buildFromTemplate([
             {
                 label: 'Serviço da Balança JADLOG',
-                enabled: false
-            },
-            { type: 'separator' },
-            {
-                label: 'Conecte a balança na porta COM1',
                 enabled: false
             },
             { type: 'separator' },
@@ -35,10 +28,16 @@ class WindowManager {
                 }
             }
         ])
+        return template
+    }
+
+    createTray(menu) {
+        this.tray = new Tray(this.icon)
+        let contextMenu = menu ? menu : this.getMenuTemplate()
 
         this.tray.setToolTip('Serviço da Balança JADLOG')
         this.tray.setContextMenu(contextMenu)
     }
 }
 
-module.exports = WindowManager
+module.exports = ApplicationManager
