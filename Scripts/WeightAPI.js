@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { SerialPort } = require('serialport')
 const express = require('express')
 const app = express()

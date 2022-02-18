@@ -1,7 +1,10 @@
+require('dotenv').config()
 const { app, MenuItem, Menu, dialog } = require('electron')
 const AutoLaunch = require('auto-launch')
 const ApplicationManager = require('./Scripts/ApplicationManager.js')
 const WeightAPI = require('./Scripts/WeightAPI.js')
+const Store = require('electron-store')
+const store = new Store()
 
 //Main Object responsible for managing the electron windows is created
 const applicationManager = new ApplicationManager()
@@ -10,14 +13,17 @@ const applicationManager = new ApplicationManager()
 //This creates the browser windows and tray in the menu bar
 app.on('ready', applicationManager.createUI.bind(applicationManager))
 app.on('ready', async () => {
-    let autoLaunch = new AutoLaunch({
-        name: 'Balança App',
-        path: app.getPath('exe')
-    })
-    autoLaunch.isEnabled().then(isEnabled => {
-        if (!isEnabled) autoLaunch.enable()
-    })
-    let weightAPI = new WeightAPI()
+    const serialPath = store.get('serialPath')
+    if (process.env.NODE_ENV != 'development') {
+        let autoLaunch = new AutoLaunch({
+            name: 'Balança App',
+            path: app.getPath('exe')
+        })
+        autoLaunch.isEnabled().then(isEnabled => {
+            if (!isEnabled) autoLaunch.enable()
+        })
+    }
+    let weightAPI = serialPath ? new WeightAPI(serialPath) : new WeightAPI()
 
     let menu = applicationManager.getMenuTemplate()
     menu.insert(
@@ -47,8 +53,9 @@ app.on('ready', async () => {
                         return {
                             label: port.friendlyName,
                             type: 'radio',
-                            checked: port.path == 'COM1',
+                            checked: serialPath ? port.path == serialPath : port.path == 'COM1',
                             click: () => {
+                                store.set('serialPath', port.path)
                                 weightAPI.stop()
                                 weightAPI = new WeightAPI(port.path)
                             }
