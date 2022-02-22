@@ -1,6 +1,6 @@
 {
     "name": "balanca-app",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "description": "Aplicação para obter peso da balança via porta serial",
     "main": "main.js",
     "scripts": {

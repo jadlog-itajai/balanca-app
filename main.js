@@ -8,6 +8,7 @@ const store = new Store()
 
 //Main Object responsible for managing the electron windows is created
 const applicationManager = new ApplicationManager()
+let weightAPI = null
 
 //Called when Electron is ready
 //This creates the browser windows and tray in the menu bar
@@ -23,9 +24,55 @@ app.on('ready', async () => {
             if (!isEnabled) autoLaunch.enable()
         })
     }
-    let weightAPI = serialPath ? new WeightAPI(serialPath) : new WeightAPI()
+
+    weightAPI = serialPath ? new WeightAPI(serialPath) : new WeightAPI()
 
     let menu = applicationManager.getMenuTemplate()
+
+    weightAPI.getPorts().then(ports => {
+        if (ports.length > 0) {
+            addCommunicationTestMenuItem(menu)
+            menu.insert(
+                menu.items.length - 1,
+                new MenuItem({
+                    label: 'Alterar Porta Serial',
+                    type: 'submenu',
+                    submenu: ports.map(port => {
+                        return {
+                            label: `Porta ${port.path}`,
+                            type: 'radio',
+                            checked: serialPath ? port.path == serialPath : port.path == 'COM1',
+                            click: () => {
+                                store.set('serialPath', port.path)
+                                weightAPI.stop()
+                                weightAPI = new WeightAPI(port.path)
+                            }
+                        }
+                    })
+                })
+            )
+        } else {
+            menu.insert(
+                menu.items.length - 1,
+                new MenuItem({
+                    label: 'Nenhuma Porta Serial Encontrada',
+                    enabled: false
+                })
+            )
+        }
+        applicationManager.tray.destroy()
+        applicationManager.createTray(menu)
+    })
+})
+
+//When all windows are closed
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
+
+function addCommunicationTestMenuItem(menu) {
     menu.insert(
         menu.items.length - 1,
         new MenuItem({
@@ -41,37 +88,4 @@ app.on('ready', async () => {
         })
     )
     menu.insert(menu.items.length - 1, new MenuItem({ type: 'separator' }))
-
-    weightAPI.getPorts().then(ports => {
-        if (ports.length > 0) {
-            menu.insert(
-                menu.items.length - 1,
-                new MenuItem({
-                    label: 'Alterar Porta Serial',
-                    type: 'submenu',
-                    submenu: ports.map(port => {
-                        return {
-                            label: port.friendlyName,
-                            type: 'radio',
-                            checked: serialPath ? port.path == serialPath : port.path == 'COM1',
-                            click: () => {
-                                store.set('serialPath', port.path)
-                                weightAPI.stop()
-                                weightAPI = new WeightAPI(port.path)
-                            }
-                        }
-                    })
-                })
-            )
-            applicationManager.tray.destroy()
-            applicationManager.createTray(menu)
-        }
-    })
-})
-
-//When all windows are closed
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-})
+}
