@@ -1,10 +1,16 @@
 require('dotenv').config()
 const { app, MenuItem, Menu, dialog } = require('electron')
+const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
 const AutoLaunch = require('auto-launch')
 const ApplicationManager = require('./Scripts/ApplicationManager.js')
 const WeightAPI = require('./Scripts/WeightAPI.js')
 const Store = require('electron-store')
 const store = new Store()
+
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
 
 //Main Object responsible for managing the electron windows is created
 const applicationManager = new ApplicationManager()
@@ -12,6 +18,9 @@ let weightAPI = null
 
 //Called when Electron is ready
 //This creates the browser windows and tray in the menu bar
+app.on('ready', () => {
+    autoUpdater.checkForUpdatesAndNotify()
+})
 app.on('ready', applicationManager.createUI.bind(applicationManager))
 app.on('ready', async () => {
     const serialPath = store.get('serialPath')
