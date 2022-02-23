@@ -16,10 +16,22 @@ log.info('App starting...')
 const applicationManager = new ApplicationManager()
 let weightAPI = null
 
-//Called when Electron is ready
-//This creates the browser windows and tray in the menu bar
 app.on('ready', () => {
     autoUpdater.checkForUpdatesAndNotify()
+
+    autoUpdater.on('update-downloaded', () => {
+        dialog
+            .showMessageBox({
+                type: 'info',
+                buttons: ['Atualizar Agora', 'Depois'],
+                title: 'Balança app - Atualização disponível',
+                message: 'Uma nova versão do aplicativo da balança foi baixada e está pronta para ser instalada.'
+            })
+            .then(result => {
+                const { response } = result
+                if (response === 0) autoUpdater.quitAndInstall()
+            })
+    })
 })
 app.on('ready', applicationManager.createUI.bind(applicationManager))
 app.on('ready', async () => {
