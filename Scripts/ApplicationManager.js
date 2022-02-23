@@ -17,7 +17,7 @@ class ApplicationManager {
     getMenuTemplate() {
         let template = Menu.buildFromTemplate([
             {
-                label: 'Serviço da Balança JADLOG',
+                label: `Serviço da Balança JADLOG - v${helper.getVersion()}`,
                 enabled: false
             },
             { type: 'separator' },

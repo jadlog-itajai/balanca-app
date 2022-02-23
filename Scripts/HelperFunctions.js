@@ -3,6 +3,10 @@ class Helper {
     static isDev() {
         return process.mainModule.filename.indexOf('app.asar') === -1
     }
+
+    static getVersion() {
+        return require('../package.json').version
+    }
 }
 
 module.exports = Helper
