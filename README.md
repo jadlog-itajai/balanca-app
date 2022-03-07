@@ -20,10 +20,19 @@ Faça o download da última versão [aqui](https://github.com/jadlog-itajai/bala
 > Ao executar o instalador essa mensagem é exibida, escolha a opção "mais informações".
 
 ![image](https://user-images.githubusercontent.com/21344756/156841076-01a0fffd-20ba-432d-a2b7-7fa25078b7cd.png)
-> Por fim selecione "executar assim mesmo".
+> Por fim, selecione "executar assim mesmo".
 
 ![image](https://user-images.githubusercontent.com/21344756/156842819-9acd29ed-4efa-4cc5-97ee-1fc97c9ade00.png)
 > Após instalado o icone do programa é exibido na bandeja do sistema, proximo ao relógio.
+
+## 🛠️ Configurando a balança
+
+Vídeo no youtube com instruções para entrar no modo de configuração da balança 9094 Plus. ([Aqui](https://youtu.be/SF39Ul-l3g8?t=63)). Caso utilize outra balança procure as configurações equivalentes.
+
+Para que a aplicação se comunique corretamente com a balança é preciso definir as configurações da balança de tal forma:
+- Protocolo de comunicação: Prt1;
+- Velocidade de comunicação: 2400;
+- Transmissão continua de dados: Ligado;
 
 ## ☕ Usando Balança-app
 
@@ -34,9 +43,9 @@ Para utilizar é necessário a extensão para o navegador que pode ser obtida [a
 
 - Seleção e persistência da porta serial COM desejada;
 - Teste rápido para verificar se o valor é obtido corretamente;
-- Atualizações automaticas.
+- Atualizações automáticas.
 
-As funcionalidades podem ser acessadas ao clicar com o botão direito sobre o icone da aplicação na bandeja do sistema, próximo ao relógio.
+As funcionalidades podem ser acessadas clicando com o botão direito sobre o icone da aplicação na bandeja do sistema, próximo ao relógio.
 
 
 
